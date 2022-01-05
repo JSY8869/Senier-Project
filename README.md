@@ -11,7 +11,7 @@
 ### 이수혁
 - 역할 : 팀원
 - 사용 가능 언어 : visual basic, c언어, c++ , phthon 
-- 개발환경 : vsxocde,visual studio
+- 개발환경 : vsocde,visual studio
 - 희망 진로 : 반도체공정 엔지니어
 ### 조윤설
 - 역할 : 
