@@ -9,10 +9,10 @@
 - 개발환경 : VSCODE, Visual Studio, Intellij IDEA
 - 희망 진로 : Server Developer
 ### 이수혁
-- 역할 : 
-- 사용 가능 언어 : 
-- 개발환경 : 
-- 희망 진로 : 
+- 역할 : 팀원
+- 사용 가능 언어 : visual basic, c언어, c++ , phthon 
+- 개발환경 : vsxocde,visual studio
+- 희망 진로 : 반도체공정 엔지니어
 ### 조윤설
 - 역할 : 
 - 사용 가능 언어 : 
