@@ -1,6 +1,6 @@
 # 팀명 작성 예정
 ## [한이음](https://www.hanium.or.kr/portal/hanium/mainOverview.do)
-- 이 repository는 2021년 한이음 공모전을 준비하기 위한 repository입니다.
+- 이 repository는 2022년 한이음 공모전을 준비하기 위한 repository입니다.
 ## 팀원 소개
 ### 정세영
 - github-name : [JSY8869](https://github.com/JSY8869)
