@@ -7,7 +7,7 @@
 - 역할 : 팀장, 총괄
 - 사용 가능 언어 : JAVA, C, C++, Python, Kotlin, JPA, Spring
 - 개발환경 : VSCODE, Visual Studio, Intellij IDEA
-- 희망 진로 : Server Developer
+- 희망 진로 : Server Engineer
 ### 이수혁
 - 역할 : 팀원
 - 사용 가능 언어 : visual basic, c언어, c++ , python 
