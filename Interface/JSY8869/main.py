@@ -1,21 +1,28 @@
 import sys
 
+from PyQt5.QtCore import QBasicTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtWidgets import (QDialog,
+                             QProgressBar, QPushButton)
 
-from action.progressBar import progressBar
-from action.set_wifi import set_wifi
+
+from action.progressBar1 import Actions, External
+from action.progressBar2 import Actions2, External2
 
 
-class MyApp(QWidget, progressBar, set_wifi):
+class MyApp(QWidget, Actions, External, Actions2, External2):
 
     def __init__(self):
         super().__init__()
         self.initUI()
 
+
     def initUI(self):
-        self.initd()
-        self.initwifi()
+        self.initUI1()
+        self.initUI2()
+
         self.setWindowTitle('My First Application')
         self.move(300, 300)
         self.resize(400, 200)
@@ -26,6 +33,6 @@ class MyApp(QWidget, progressBar, set_wifi):
 
 
 if __name__ == '__main__':
-   app = QApplication(sys.argv)
-   ex = MyApp()
-   sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
