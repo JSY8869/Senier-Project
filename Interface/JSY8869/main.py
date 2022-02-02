@@ -1,38 +1,95 @@
-import sys
-
-from PyQt5.QtCore import QBasicTimer
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import (QDialog,
-                             QProgressBar, QPushButton)
-
-
-from action.progressBar1 import Actions, External
-from action.progressBar2 import Actions2, External2
+# Welcome to PyShine
+# This is part 12 of the PyQt5 learning series
+# Start and Stop Qthreads
+# Source code available: www.pyshine.com
+from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import uic
+import sys, time
 
 
-class MyApp(QWidget, Actions, External, Actions2, External2):
-
+class PyShine_THREADS_APP(QtWidgets.QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.initUI()
+        QtWidgets.QMainWindow.__init__(self)
+        self.ui = uic.loadUi('threads.ui', self)
+        self.resize(888, 200)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("PyShine.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
+
+        self.thread = {}
+        self.pushButton.clicked.connect(self.start_worker_1)
+        self.pushButton_2.clicked.connect(self.start_worker_2)
+        self.pushButton_3.clicked.connect(self.start_worker_3)
+        self.pushButton_4.clicked.connect(self.stop_worker_1)
+        self.pushButton_5.clicked.connect(self.stop_worker_2)
+        self.pushButton_6.clicked.connect(self.stop_worker_3)
+
+    def start_worker_1(self):
+        self.thread[1] = ThreadClass(parent=None, index=1)
+        self.thread[1].start()
+        self.thread[1].any_signal.connect(self.my_function)
+        self.pushButton.setEnabled(False)
+
+    def start_worker_2(self):
+        self.thread[2] = ThreadClass(parent=None, index=2)
+        self.thread[2].start()
+        self.thread[2].any_signal.connect(self.my_function)
+        self.pushButton_2.setEnabled(False)
+
+    def start_worker_3(self):
+        self.thread[3] = ThreadClass(parent=None, index=3)
+        self.thread[3].start()
+        self.thread[3].any_signal.connect(self.my_function)
+        self.pushButton_3.setEnabled(False)
+
+    def stop_worker_1(self):
+        self.thread[1].stop()
+        self.pushButton.setEnabled(True)
+
+    def stop_worker_2(self):
+        self.thread[2].stop()
+        self.pushButton_2.setEnabled(True)
+
+    def stop_worker_3(self):
+        self.thread[3].stop()
+        self.pushButton_3.setEnabled(True)
+
+    def my_function(self, counter):
+
+        cnt = counter
+        index = self.sender().index
+        if index == 1:
+            self.progressBar.setValue(cnt)
+        if index == 2:
+            self.progressBar_2.setValue(cnt)
+        if index == 3:
+            self.progressBar_3.setValue(cnt)
 
 
-    def initUI(self):
-        self.initUI1()
-        self.initUI2()
+class ThreadClass(QtCore.QThread):
+    any_signal = QtCore.pyqtSignal(int)
 
-        self.setWindowTitle('My First Application')
-        self.move(300, 300)
-        self.resize(400, 200)
-        self.setWindowTitle('Icon')
-        self.setWindowIcon(QIcon('image/main_image.png'))
-        self.setGeometry(300, 300, 1000, 600)
-        self.show()
+    def __init__(self, parent=None, index=0):
+        super(ThreadClass, self).__init__(parent)
+        self.index = index
+        self.is_running = True
+
+    def run(self):
+        print('Starting thread...', self.index)
+        cnt = 0
+        while (True):
+            cnt += 1
+            if cnt == 99: cnt = 0
+            time.sleep(0.01)
+            self.any_signal.emit(cnt)
+
+    def stop(self):
+        self.is_running = False
+        print('Stopping thread...', self.index)
+        self.terminate()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = MyApp()
-    sys.exit(app.exec_())
+app = QtWidgets.QApplication(sys.argv)
+mainWindow = PyShine_THREADS_APP()
+mainWindow.show()
+sys.exit(app.exec_())
