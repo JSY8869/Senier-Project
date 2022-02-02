@@ -1,7 +1,3 @@
-# Welcome to PyShine
-# This is part 12 of the PyQt5 learning series
-# Start and Stop Qthreads
-# Source code available: www.pyshine.com
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5 import uic
 import sys, time
