@@ -1,10 +1,10 @@
-# Welcome to PyShine
-# This is part 12 of the PyQt5 learning series
-# Start and Stop Qthreads
-# Source code available: www.pyshine.com
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5 import uic
-import sys, time
+import sys
+import time
+
+from PyQt5.QtWidgets import QPushButton, QLineEdit, QInputDialog
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLineEdit, QInputDialog)
 
 
 class PyShine_THREADS_APP(QtWidgets.QMainWindow):
@@ -23,6 +23,12 @@ class PyShine_THREADS_APP(QtWidgets.QMainWindow):
         self.pushButton_4.clicked.connect(self.stop_worker_1)
         self.pushButton_5.clicked.connect(self.stop_worker_2)
         self.pushButton_6.clicked.connect(self.stop_worker_3)
+
+        self.le = QLineEdit(self)
+        self.le2 = QLineEdit(self)
+
+        self.initwifiName()
+        self.initwifiPassword()
 
     def start_worker_1(self):
         self.thread[1] = ThreadClass(parent=None, index=1)
@@ -64,6 +70,40 @@ class PyShine_THREADS_APP(QtWidgets.QMainWindow):
             self.progressBar_2.setValue(cnt)
         if index == 3:
             self.progressBar_3.setValue(cnt)
+        if index == 4:
+            self.progressBar_4.setValue(cnt)
+
+    def initwifiName(self):
+        self.btn1 = QPushButton('wifi name 입력', self)
+        self.btn1.move(10, 600)
+
+        self.le.move(10, 570)
+        self.btn1.clicked.connect(self.showDialogName())
+
+
+
+    def showDialogName(self):
+        text, ok = QInputDialog.getText(self, '와이파이 이름', 'Enter your wifi name: ')
+
+        if ok:
+            self.le.setText(str(text))
+            print(text)
+
+    def initwifiPassword(self):
+        self.btn2 = QPushButton('wifi password 입력', self)
+        self.btn2.move(50, 600)
+
+        self.le2.move(50, 570)
+        self.btn2.clicked.connect(self.showDialogPassword())
+
+
+
+    def showDialogPassword(self):
+        text, ok = QInputDialog.getText(self, '와이파이 비밀번호', 'Enter your wifi password: ')
+
+        if ok:
+            self.le2.set
+
 
 
 class ThreadClass(QtCore.QThread):
