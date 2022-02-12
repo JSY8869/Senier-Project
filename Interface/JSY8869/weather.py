@@ -98,15 +98,15 @@ def how_weather(nx,ny):
 
     state = data['weather']['state']
 
-    print(data['date'][0:4], '년', data['date'][4:6], '월', data['date'][6:8], '일', base_time, '시의 날씨 데이터입니다.')
+    day = (data['date'][0:4] + "년" + data['date'][4:6] + "월" + data['date'][6:8] + "일" + base_time + "시의 날씨 데이터입니다.")
 
     if state == '비':
-        print('비가 와요. 우산을 꼭 챙겨주세요!')
+        return(day + "\n비가 와요. 우산을 꼭 챙겨주세요!")
     elif state == '비/눈':
-        print('비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!')
+        return(day + "\n비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!")
     elif state == '눈':
-        print('눈이 와요. 장갑을 꼭 챙기세요!')
+        return(day + "\n눈이 와요. 장갑을 꼭 챙기세요!")
     elif state == '소나기':
-        print('소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!')
+        return(day + "\n소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!")
     else:
-        print('날씨가 좋네요 :)')
+        return(day + "\n날씨가 좋네요 :)")

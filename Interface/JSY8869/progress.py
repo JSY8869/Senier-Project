@@ -3,23 +3,32 @@ from PyQt5 import uic
 import sys
 import time
 
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
 
-class PyShine_THREADS_APP(QtWidgets.QMainWindow):
+import weather
+import wifi
+
+thread_ui = uic.loadUiType("threads.ui")[0]
+class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
     def __init__(self):
-        QtWidgets.QMainWindow.__init__(self)
-        self.ui = uic.loadUi('threads.ui', self)
-        self.resize(888, 200)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("PyShine.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.setWindowIcon(icon)
-
         self.thread = {}
+        super(PyShine_THREADS_APP,self).__init__()
+        self.initUi1()
+        self.show()
+
+
+
+    def initUi1(self):
+        self.setupUi(self)
         self.pushButton.clicked.connect(self.start_worker_1)
         self.pushButton_2.clicked.connect(self.start_worker_2)
         self.pushButton_3.clicked.connect(self.start_worker_3)
         self.pushButton_4.clicked.connect(self.stop_worker_1)
         self.pushButton_5.clicked.connect(self.stop_worker_2)
         self.pushButton_6.clicked.connect(self.stop_worker_3)
+        self.weather_button.clicked.connect(self.weather_load)
+        self.wifi_button.clicked.connect(self.wifi_set)
 
     def start_worker_1(self):
         self.thread[1] = ThreadClass(parent=None, index=1)
@@ -51,11 +60,23 @@ class PyShine_THREADS_APP(QtWidgets.QMainWindow):
         self.thread[3].stop()
         self.pushButton_3.setEnabled(True)
 
+    def weather_load(self):
+        self.textEdit.setText(weather.how_weather(62,120))
+
+    def wifi_set(self):
+        self.hide()
+        self.second = wifi.set_wifi()
+        self.second.exec()
+        self.show()
+
+
     def my_function(self, counter):
 
         cnt = counter
         index = self.sender().index
         if index == 1:
+            if cnt == 99:
+                self.stop_worker_1
             self.progressBar.setValue(cnt)
         if index == 2:
             self.progressBar_2.setValue(cnt)
@@ -79,11 +100,12 @@ class ThreadClass(QtCore.QThread):
         cnt = 0
         while (True):
             cnt += 1
-            if cnt == 99: cnt = 0
+            if cnt == 101:
+                break
             time.sleep(0.01)
             self.any_signal.emit(cnt)
-
     def stop(self):
+        self.any_signal.emit(0)
         self.is_running = False
         print('Stopping thread...', self.index)
         self.terminate()

@@ -1,9 +1,9 @@
+import progress
 import weather
 
 
 def main():
-    nx, ny = input("nx, ny 입력: ").split()
-    weather.how_weather(nx,ny)
+    progress.PyShine_THREADS_APP()
 
 
 if __name__ == '__main__':
