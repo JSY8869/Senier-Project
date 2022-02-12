@@ -1,5 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5 import uic
+from PyQt5 import QtCore, QtWidgets
 import sys
 import time
 
@@ -21,6 +20,9 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
 
     def initUi1(self):
         self.setupUi(self)
+        self.progressBar.setValue(0)
+        self.progressBar_2.setValue(0)
+        self.progressBar_3.setValue(0)
         self.pushButton.clicked.connect(self.start_worker_1)
         self.pushButton_2.clicked.connect(self.start_worker_2)
         self.pushButton_3.clicked.connect(self.start_worker_3)
@@ -75,15 +77,11 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
         cnt = counter
         index = self.sender().index
         if index == 1:
-            if cnt == 99:
-                self.stop_worker_1
             self.progressBar.setValue(cnt)
         if index == 2:
             self.progressBar_2.setValue(cnt)
         if index == 3:
             self.progressBar_3.setValue(cnt)
-        if index == 4:
-            self.progressBar_4.setValue(cnt)
 
 
 
@@ -109,7 +107,6 @@ class ThreadClass(QtCore.QThread):
         self.is_running = False
         print('Stopping thread...', self.index)
         self.terminate()
-
 
 app = QtWidgets.QApplication(sys.argv)
 mainWindow = PyShine_THREADS_APP()
