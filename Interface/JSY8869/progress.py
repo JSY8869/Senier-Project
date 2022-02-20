@@ -2,8 +2,11 @@ from PyQt5 import QtCore, QtWidgets
 import sys
 import time
 
+from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+from gtts import gTTS
+from playsound import playsound
 
 import weather
 import wifi
@@ -20,9 +23,30 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
 
     def initUi1(self):
         self.setupUi(self)
+        # 진행도 시작점 0으로 초기화
         self.progressBar.setValue(0)
         self.progressBar_2.setValue(0)
         self.progressBar_3.setValue(0)
+
+        # 배경 이미지 설정
+        palette = QPalette()
+        palette.setBrush(10,QBrush(QImage('./image/background.jpg')))
+        self.setPalette(palette)
+
+        # button 이미지 설정
+        self.pushButton.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
+        self.pushButton_4.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
+        self.pushButton_2.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
+        self.pushButton_5.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
+        self.pushButton_3.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
+        self.pushButton_6.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
+
+        # 날씨 버튼 이미지 설정
+        self.weather_button.setStyleSheet('border-image:url(./image/cute_dog.jpg);border:0px;')
+        # 와이파이 버튼 이미지 설정
+        self.wifi_button.setStyleSheet('border-image:url(./image/wifi_image.png);border:0px;')
+
+        # 이벤트 설정
         self.pushButton.clicked.connect(self.start_worker_1)
         self.pushButton_2.clicked.connect(self.start_worker_2)
         self.pushButton_3.clicked.connect(self.start_worker_3)
@@ -51,19 +75,36 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
         self.pushButton_3.setEnabled(False)
 
     def stop_worker_1(self):
-        self.thread[1].stop()
-        self.pushButton.setEnabled(True)
+        try:
+            self.thread[1].stop()
+            self.pushButton.setEnabled(True)
+        except:
+            pass
 
     def stop_worker_2(self):
-        self.thread[2].stop()
-        self.pushButton_2.setEnabled(True)
-
+        try:
+            self.thread[2].stop()
+            self.pushButton_2.setEnabled(True)
+        except:
+            pass
     def stop_worker_3(self):
-        self.thread[3].stop()
-        self.pushButton_3.setEnabled(True)
-
+        try:
+            self.thread[3].stop()
+            self.pushButton_3.setEnabled(True)
+        except:
+            pass
     def weather_load(self):
-        self.textEdit.setText(weather.how_weather(62,120))
+        self.textEdit.setStyleSheet('font-size:35px;')
+        text = weather.how_weather(62,120)
+        self.textEdit.setText(text)
+
+        self.speak(text)
+
+    def speak(self, text):
+        tts = gTTS(text=text, lang='ko')
+        filename = 'voice.mp3'
+        tts.save(filename)
+        playsound(filename)
 
     def wifi_set(self):
         self.hide()

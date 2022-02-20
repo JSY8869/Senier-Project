@@ -1,5 +1,4 @@
 import requests  # HTTP 요청을 보내는 모듈
-import json  # json 파일 파싱하여 데이터 읽는 모듈
 import datetime  # 날짜시간 모듈
 from datetime import date, datetime, timedelta  # 현재 날짜 외의 날짜 구하기 위한 모듈
 
@@ -15,17 +14,14 @@ def how_weather(nx,ny):
     service_key = "zaLj9eycWY9pgOI72vYs6W8iFk1lag1uWZmjjvec69bhR48+1DatOVR50ZhB3oiS2wwqLSaRevnFHZENdSPRhg=="
 
     now = datetime.now()
-    print("지금은", now.year, "년", now.month, "월", now.day, "일", now.hour, "시", now.minute, "분", now.second, "초입니다.")
 
     # 오늘
     today = datetime.today()  # 현재 지역 날짜 반환
     today_date = today.strftime("%Y%m%d")  # 오늘의 날짜 (연도/월/일 반환)
-    print('오늘의 날짜는', today_date)
 
     # 어제
     yesterday = date.today() - timedelta(days=1)
     yesterday_date = yesterday.strftime('%Y%m%d')
-    print('어제의 날짜는', yesterday_date)
 
     # 1일 총 8번 데이터가 업데이트 된다.(0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300)
     # 현재 api를 가져오려는 시점의 이전 시각에 업데이트된 데이터를 base_time, base_date로 설정
@@ -61,9 +57,11 @@ def how_weather(nx,ny):
     params ={'serviceKey' : service_key, 'pageNo' : pageNo, 'numOfRows' : numOfRows, 'dataType' : 'JSON', 'base_date' : base_date, 'base_time' : base_time, 'nx' : nx, 'ny' : ny }
 
     # 값 요청 (웹 브라우저 서버에서 요청 - url주소와 )
-    res = requests.get(vilage_weather_url, params)
-    items = res.json().get('response').get('body').get('items')
-
+    try:
+        res = requests.get(vilage_weather_url, params)
+        items = res.json().get('response').get('body').get('items')
+    except:
+        return("날씨 불러오기 실패 (wifi 설정을 먼저 해주세요)")
     data = dict()
     data['date'] = base_date
 
@@ -93,8 +91,6 @@ def how_weather(nx,ny):
             weather_data['state'] = weather_state
 
     data['weather'] = weather_data
-
-    print()
 
     state = data['weather']['state']
 
