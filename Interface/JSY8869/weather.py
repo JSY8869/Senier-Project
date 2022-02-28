@@ -28,30 +28,39 @@ def how_weather(nx,ny):
     if now.hour < 2 or (now.hour == 2 and now.minute <= 10):  # 0시~2시 10분 사이
         base_date = yesterday_date  # 구하고자 하는 날짜가 어제의 날짜
         base_time = "2300"
+        voice_time = "오후 11시"
     elif now.hour < 5 or (now.hour == 5 and now.minute <= 10):  # 2시 11분~5시 10분 사이
         base_date = today_date
+        voice_time = "오전 2시"
         base_time = "0200"
     elif now.hour < 8 or (now.hour == 8 and now.minute <= 10):  # 5시 11분~8시 10분 사이
         base_date = today_date
         base_time = "0500"
+        voice_time = "오전 5시"
     elif now.hour <= 11 or now.minute <= 10:  # 8시 11분~11시 10분 사이
         base_date = today_date
         base_time = "0800"
+        voice_time = "오전 8시"
     elif now.hour < 14 or (now.hour == 14 and now.minute <= 10):  # 11시 11분~14시 10분 사이
         base_date = today_date
         base_time = "1100"
+        voice_time = "오전 11시"
     elif now.hour < 17 or (now.hour == 17 and now.minute <= 10):  # 14시 11분~17시 10분 사이
         base_date = today_date
         base_time = "1400"
+        voice_time = "오후 2시"
     elif now.hour < 20 or (now.hour == 20 and now.minute <= 10):  # 17시 11분~20시 10분 사이
         base_date = today_date
         base_time = "1700"
+        voice_time = "오후 5시"
     elif now.hour < 23 or (now.hour == 23 and now.minute <= 10):  # 20시 11분~23시 10분 사이
         base_date = today_date
         base_time = "2000"
+        voice_time = "오후 8시"
     else:  # 23시 11분~23시 59분
         base_date = today_date
         base_time = "2300"
+        voice_time = "오후 11시"
     pageNo = "1"
     numOfRows = "100"
     params ={'serviceKey' : service_key, 'pageNo' : pageNo, 'numOfRows' : numOfRows, 'dataType' : 'JSON', 'base_date' : base_date, 'base_time' : base_time, 'nx' : nx, 'ny' : ny }
@@ -94,7 +103,7 @@ def how_weather(nx,ny):
 
     state = data['weather']['state']
 
-    day = (data['date'][0:4] + "년" + data['date'][4:6] + "월" + data['date'][6:8] + "일" + base_time + "시의 날씨 데이터입니다.")
+    day = (data['date'][0:4] + "년" + data['date'][4:6] + "월" + data['date'][6:8] + "일" + voice_time + "의 날씨 데이터입니다.")
 
     if state == '비':
         return(day + "\n비가 와요. 우산을 꼭 챙겨주세요!")
