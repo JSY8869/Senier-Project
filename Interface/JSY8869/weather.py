@@ -1,10 +1,21 @@
-import requests  # HTTP 요청을 보내는 모듈
 import datetime  # 날짜시간 모듈
 from datetime import date, datetime, timedelta  # 현재 날짜 외의 날짜 구하기 위한 모듈
+import requests
+import json
 
 
+def how_weather():
+    key = 'a3efa2941fb3fcf4f3877cc063439f9b'
+    send_url = 'http://api.ipstack.com/check?access_key=' + key
+    r = requests.get(send_url)
+    j = json.loads(r.text)
 
-def how_weather(nx,ny):
+    # 경도
+    ny = int(j['longitude'])
+
+    # 위도
+    nx = int(j['latitude'])
+
     # 기상청_동네 예보 조회 서비스 api 데이터 url 주소
     vilage_weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
     # 실황정보를 조회하기 위해 발표일자, 발표시각, 예보지점 X 좌표, 예보지점 Y 좌표의 조회 조건으로
@@ -103,15 +114,13 @@ def how_weather(nx,ny):
 
     state = data['weather']['state']
 
-    day = (data['date'][0:4] + "년" + data['date'][4:6] + "월" + data['date'][6:8] + "일" + voice_time + "의 날씨 데이터입니다.")
-
     if state == '비':
-        return(day + "\n비가 와요. 우산을 꼭 챙겨주세요!")
+        return("\n비가 와요. 우산을 꼭 챙겨주세요!", 0)
     elif state == '비/눈':
-        return(day + "\n비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!")
+        return("\n비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!", 1)
     elif state == '눈':
-        return(day + "\n눈이 와요. 장갑을 꼭 챙기세요!")
+        return("\n눈이 와요. 장갑을 꼭 챙기세요!", 2)
     elif state == '소나기':
-        return(day + "\n소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!")
+        return("\n소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!", 3)
     else:
-        return(day + "\n날씨가 좋네요 :)")
+        return("\n날씨가 좋네요. 좋은 하루 보내세요!", 4)
