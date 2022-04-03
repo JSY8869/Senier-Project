@@ -4,6 +4,8 @@ from datetime import date, datetime, timedelta  # 현재 날짜 외의 날짜 �
 
 import requests
 
+from IpToXY import mapToGrid
+
 
 def how_weather():
     key = 'a3efa2941fb3fcf4f3877cc063439f9b'
@@ -11,13 +13,12 @@ def how_weather():
     r = requests.get(send_url)
     j = json.loads(r.text)
 
-    # 경도
-    # ny = int(j['longitude'])
-    ny = 121
-
     # 위도
-    # nx = int(j['latitude'])
-    nx = 61
+    nx = j['latitude']
+    # 경도
+    ny = j['longitude']
+
+    nx, ny = mapToGrid(nx,ny)
 
     # 기상청_동네 예보 조회 서비스 api 데이터 url 주소
     vilage_weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
@@ -107,12 +108,12 @@ def how_weather():
 
     state = data['weather']['state']
     if state == '비':
-        return "\n비가 와요. 우산을 꼭 챙겨주세요!", 0
+        return "비가 와요. 우산을 꼭 챙겨주세요!", 0
     elif state == '비/눈':
-        return "\n비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!", 1
+        return "비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!", 1
     elif state == '눈':
-        return "\n눈이 와요. 장갑을 꼭 챙기세요!", 2
+        return "눈이 와요. 장갑을 꼭 챙기세요!", 2
     elif state == '소나기':
-        return "\n소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!", 3
+        return "소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!", 3
     else:
-        return "\n날씨가 좋네요. 좋은 하루 보내세요!", 4
+        return "날씨가 좋네요. 좋은 하루 보내세요!", 4

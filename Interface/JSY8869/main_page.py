@@ -6,7 +6,6 @@ from PyQt5.QtGui import QPalette, QBrush, QImage
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
-import tts
 import weather
 
 thread_ui = uic.loadUiType("ui/threads.ui")[0]
@@ -33,12 +32,10 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
         self.setPalette(palette)
 
         # button 이미지 설정
-        # self.pushButton.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
-        # self.pushButton_4.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
-        # self.pushButton_2.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
-        # self.pushButton_5.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
-        # self.pushButton_3.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
-        # self.pushButton_6.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
+        self.pushButton.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
+        self.pushButton_2.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
+        self.pushButton_3.setStyleSheet('border-image:url(./image/start_button.png);border:0px;')
+        self.pushButton_4.setStyleSheet('border-image:url(./image/stop_button.png);border:0px;')
 
         # 이벤트 설정
         self.pushButton.clicked.connect(self.start_worker_1)
@@ -48,14 +45,12 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
         self.weather_button.clicked.connect(self.weather_load)
 
     def start_worker_1(self):
-        # tts.start_voice()
         self.thread[1] = ThreadClass(parent=None, index=1)
         self.thread[1].start()
         self.thread[1].any_signal.connect(self.my_function)
         self.pushButton.setEnabled(False)
 
     def start_worker_2(self):
-        # tts.start_voice()
         self.thread[2] = ThreadClass(parent=None, index=2)
         self.thread[2].start()
         self.thread[2].any_signal.connect(self.my_function)
@@ -91,7 +86,6 @@ class PyShine_THREADS_APP(QMainWindow,QWidget, thread_ui):
                 self.weather_button.setStyleSheet('border-image:url(image/shower.png);border:0px;')
             elif weather_data == 4:
                 self.weather_button.setStyleSheet('border-image:url(image/sunny.jpg);border:0px;')
-            tts.speak(weather_data)
         except:
             self.textEdit.setText("날씨 조회 실패 (인터넷 상태나 주소 설정을 확인해주세요.)")
 
