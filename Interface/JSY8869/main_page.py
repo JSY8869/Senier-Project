@@ -97,4 +97,4 @@ class PyShine_THREADS_APP(QMainWindow, QWidget, thread_ui):
         if index == 2:
             self.progressBar_2.setValue(cnt)
             if cnt == 100:
-                self.pushButton_2.setEnabled(True)
+                self.pushButton_3.setEnabled(True)
