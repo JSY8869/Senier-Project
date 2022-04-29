@@ -1,4 +1,4 @@
-char shoe_start = '1';
+char usan_start = '1';
 void setup() {
   pinMode(10, OUTPUT);      // 출력핀 설정
   pinMode(11, OUTPUT);
@@ -7,7 +7,7 @@ void setup() {
 
 void loop() {
   char a = Serial.read();
-  int sign = strcmp(&a,&shoe_start);
+  int sign = strcmp(&a,&usan_start);
   if(sign == 0){
     turnOn();
   }else{
