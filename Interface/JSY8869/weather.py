@@ -1,31 +1,19 @@
 import datetime  # 날짜시간 모듈
-import json
 from datetime import date, datetime, timedelta  # 현재 날짜 외의 날짜 구하기 위한 모듈
 
 import requests
 
-from IpToXY import mapToGrid
+from ip_to_xy import ip_to_xy
 
 
 def how_weather():
-    key = 'a3efa2941fb3fcf4f3877cc063439f9b'
-    send_url = 'http://api.ipstack.com/check?access_key=' + key
-    r = requests.get(send_url)
-    j = json.loads(r.text)
 
-    # 위도
-    nx = j['latitude']
-    # 경도
-    ny = j['longitude']
-
-    nx, ny = mapToGrid(nx,ny)
+    nx, ny = ip_to_xy()
 
     # 기상청_동네 예보 조회 서비스 api 데이터 url 주소
-    vilage_weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
-    # 실황정보를 조회하기 위해 발표일자, 발표시각, 예보지점 X 좌표, 예보지점 Y 좌표의 조회 조건으로
-    # 자료구분코드, 실황값, 발표일자, 발표시각, 예보지점 X 좌표, 예보지점 Y 좌표의 정보를 조회하는 기능
+    village_weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
 
-    # 발급 받은 인증키 (Encoding Key)
+    # Encoding Key
     service_key = "zaLj9eycWY9pgOI72vYs6W8iFk1lag1uWZmjjvec69bhR48+1DatOVR50ZhB3oiS2wwqLSaRevnFHZENdSPRhg=="
 
     now = datetime.now()
@@ -67,53 +55,31 @@ def how_weather():
     else:  # 23시 11분~23시 59분
         base_date = today_date
         base_time = "2300"
+
     pageNo = "1"
     numOfRows = "100"
     params = {'serviceKey': service_key, 'pageNo': pageNo, 'numOfRows': numOfRows, 'dataType': 'JSON',
               'base_date': base_date, 'base_time': base_time, 'nx': nx, 'ny': ny}
 
-    # 값 요청 (웹 브라우저 서버에서 요청 - url주소와 )
+    # 값 요청
     try:
-        res = requests.get(vilage_weather_url, params)
-        items = res.json().get('response').get('body').get('items')
+        response = requests.get(village_weather_url, params)
+        items = response.json().get('response').get('body').get('items')
     except:
         return "날씨 불러오기 실패 (wifi 설정을 먼저 해주세요)"
-    data = dict()
-    data['date'] = base_date
-    weather_data = dict()
-    for item in items['item']:
-        # 기온
-        if item['category'] == 'T3H':
-            weather_data['tmp'] = item['fcstValue']
 
+    for item in items['item']:
         # 기상상태
         if item['category'] == 'PTY':
             weather_code = item['fcstValue']
 
-            if weather_code == '1':
-                weather_state = '비'
-            elif weather_code == '2':
-                weather_state = '비/눈'
-            elif weather_code == '3':
-                weather_state = '눈'
-            elif weather_code == '4':
-                weather_state = '소나기'
-            else:
-                weather_state = '없음'
-
-            weather_data['code'] = weather_code
-            weather_data['state'] = weather_state
-
-    data['weather'] = weather_data
-
-    state = data['weather']['state']
-    if state == '비':
+    if weather_code == '1':
         return "비가 와요. 우산을 꼭 챙겨주세요!", 0
-    elif state == '비/눈':
+    elif weather_code == '2':
         return "비 또는 눈이 와요. 쌀쌀하니 따뜻하게 입어요! 우산도 꼭 챙겨주세요!", 1
-    elif state == '눈':
+    elif weather_code == '3':
         return "눈이 와요. 장갑을 꼭 챙기세요!", 2
-    elif state == '소나기':
+    elif weather_code == '4':
         return "소나기가 와요. 비가 언제 올지 모르니, 우산을 꼭 챙겨주세요!", 3
     else:
         return "날씨가 좋네요. 좋은 하루 보내세요!", 4

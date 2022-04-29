@@ -1,8 +1,5 @@
 import math
 
-NX = 149            ## X축 격자점 수
-NY = 253            ## Y축 격자점 수
-
 Re = 6371.00877     ##  지도반경
 grid = 5.0          ##  격자간격 (km)
 slat1 = 30.0        ##  표준위도 1
@@ -31,13 +28,13 @@ ro = math.tan(PI * 0.25 + olat * 0.5)
 ro = re * sf / math.pow(ro, sn)
 
 
-def mapToGrid(lat, lon, code = 0 ):
+def map_to_grid(lat, lon):
     ra = math.tan(PI * 0.25 + lat * DEGRAD * 0.5)
     ra = re * sf / pow(ra, sn)
     theta = lon * DEGRAD - olon
-    if theta > PI :
+    if theta > PI:
         theta -= 2.0 * PI
-    if theta < -PI :
+    if theta < -PI:
         theta += 2.0 * PI
     theta *= sn
     x = (ra * math.sin(theta)) + xo
